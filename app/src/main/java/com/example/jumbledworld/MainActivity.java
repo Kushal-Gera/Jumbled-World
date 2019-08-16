@@ -25,6 +25,8 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
+    //add few hints
+
     ArrayList<View> arrayList;
     ArrayList<Button> buttonList;
     ArrayList<String> WORDS;
