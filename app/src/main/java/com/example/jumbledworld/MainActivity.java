@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,21 +14,28 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    private ArrayList<View> arrayList;
+    ArrayList<View> arrayList;
+    ArrayList<Button> buttonList;
+    ArrayList<String> WORDS;
 
     Button op1, op2, op3, op4 ,op5 ,op6, op7, op8;
     TextView ans1, ans2, ans3, ans4;
     TextView back, reset, hint, level;
 
     private static final String default_ques = "?";
-    final String WORD = "cane";  //  I will later convert it to array to contain all words
-    public int l = 1;            //  it is level
+    public int l = 0;//  it is level
+    public int size;
     Dialog dialog;
 
 
@@ -36,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        WORDS = new ArrayList<>();
+        WORDS.add("time");  WORDS.add("come");  WORDS.add("when");  WORDS.add("duke");
+        WORDS.add("mute");  WORDS.add("kite");  WORDS.add("tyre");  WORDS.add("rain");
+        size = WORDS.size();
+
         //these are the initialisations :(
         op1 = findViewById(R.id.op1);   op2 = findViewById(R.id.op2);   op3 = findViewById(R.id.op3);   op4 = findViewById(R.id.op4);
         op5 = findViewById(R.id.op5);   op6 = findViewById(R.id.op6);   op7 = findViewById(R.id.op7);   op8 = findViewById(R.id.op8);
@@ -43,9 +56,12 @@ public class MainActivity extends AppCompatActivity {
         ans1 = findViewById(R.id.ans1);   ans2 = findViewById(R.id.ans2);
         ans3 = findViewById(R.id.ans3);   ans4 = findViewById(R.id.ans4);
 
-        setAllOptions();
         dialog = new Dialog(this);
         arrayList = new ArrayList<>();
+        buttonList = new ArrayList<>();
+
+        setAllOptions();
+        ///////////////////////////////////////////////////////////////
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -73,14 +89,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
         level = findViewById(R.id.level);
-        level.setText("Level " + l);
+        level.setText("Level " + (l+1) );
+
+        initialise_with(WORDS.get(l), buttonList);
 
 
+        
+    }
 
+    private void initialise_with(final String word, final ArrayList<Button> btns){
+
+        if (word == null){
+            for (int i = 0; i < 8; i++)
+                btns.get(i).setText("");
+            return;
+        }
+        char[] chars = generator(word).toCharArray();
+
+        for (int i = 0; i < chars.length; i++)
+            btns.get(i).setText( String.valueOf(chars[i]) );
 
     }
 
     private void setAllOptions(){
+
+        buttonList.add(op1);        buttonList.add(op2);        buttonList.add(op3);        buttonList.add(op4);
+        buttonList.add(op5);        buttonList.add(op6);        buttonList.add(op7);        buttonList.add(op8);
 
         op1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkAnswer(final String userAns){
 //        later increase level as well
 
-        if (userAns.equalsIgnoreCase(WORD) ){
+        if (userAns.equalsIgnoreCase(WORDS.get(l)) ){
 //            PASS
             Handler h1 = new Handler();
             h1.postDelayed(new Runnable() {
@@ -208,8 +242,26 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View v) {
 //                  increase level currently
                             dialog.dismiss();
-                            l++;
-                            level.setText("Level "+ l);
+                            if (l+1 < size){
+                                l++;
+                                initialise_with(WORDS.get(l), buttonList);
+                            }
+                            else {
+                                Snackbar.make(ans1,"Game Ends Here.\nNew Levels Will Come In The Next Update", Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("Reset Game", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                l = 0;
+                                                level.setText("Level " + (l+1));
+                                                initialise_with(WORDS.get(l), buttonList);
+                                            }
+                                        })
+                                        .setActionTextColor(getResources().getColor(R.color.colorAccent))
+                                        .show();
+                                initialise_with(null, buttonList);
+                                return;
+                            }
+                            level.setText("Level " + (l+1) );
                         }
                     });
 
@@ -270,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void hide_n_add(View v){
+
         v.setVisibility(View.INVISIBLE);
         arrayList.add(v);
 
@@ -281,6 +334,21 @@ public class MainActivity extends AppCompatActivity {
             v.setVisibility(View.VISIBLE);
 
         arrayList.clear();
+    }
+
+    private String generator(final String words){
+
+        String new_words = words;
+        for (int i = 0; i < 4; i++) {
+
+            int random = new Random().nextInt(26) + 65;
+            String ns = String.valueOf( (char) random );
+
+            new_words = new_words.concat(ns);
+
+        }
+        return jumbleUp(new_words).toUpperCase();
+
     }
 
     private String jumbleUp(final String words){
@@ -300,20 +368,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String generator(final String words){
-
-        String new_words = words;
-        for (int i = 0; i < 4; i++) {
-
-            int random = new Random().nextInt(26) + 65;
-            String ns = String.valueOf( (char) random );
-
-            new_words = new_words.concat(ns);
-
-        }
-        return jumbleUp(new_words).toUpperCase();
-
-    }
 
 
 
