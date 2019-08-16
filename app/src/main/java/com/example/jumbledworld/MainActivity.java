@@ -1,6 +1,7 @@
 package com.example.jumbledworld;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,17 +31,25 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<View> arrayList;
     ArrayList<Button> buttonList;
+    ArrayList<TextView> tvList;
     ArrayList<String> WORDS;
 
     private Button op1, op2, op3, op4 ,op5 ,op6, op7, op8;
     private TextView ans1, ans2, ans3, ans4;
     TextView back, reset, hint, level;
+    ImageView rocket;
 
+    public int click = 1;
+    public int pointer = 0;
+    public int allowedHint = 3;
     private static final String default_ques = "?";
-    public int l = 0;//  it is level
+    public int l = 0;      //  it is level
     public int size;
     public boolean hasEnd = false;
     Dialog dialog;
+
+    int hint1 = 10;         //just an aribitiary
+    int hint2 = 10;         //value to initialise it
 
 
     @Override
@@ -48,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         WORDS = new ArrayList<>();
-        WORDS.add("time");  WORDS.add("come");  WORDS.add("when");  WORDS.add("duke");
-        WORDS.add("mute");  WORDS.add("kite");  WORDS.add("tyre");  WORDS.add("rain");
+        WORDS.add("time");  WORDS.add("come");  WORDS.add("mute");  WORDS.add("kite");
+        WORDS.add("tyre");  WORDS.add("rain");  WORDS.add("when");  WORDS.add("duke");
         size = WORDS.size();
 
         //these are the initialisations :(
@@ -62,9 +72,13 @@ public class MainActivity extends AppCompatActivity {
         dialog = new Dialog(this);
         arrayList = new ArrayList<>();
         buttonList = new ArrayList<>();
+        tvList = new ArrayList<>();
+        tvList.add(ans1);   tvList.add(ans2);   tvList.add(ans3);   tvList.add(ans4);
 
         setAllOptions();
         ///////////////////////////////////////////////////////////////
+
+        rocket = findViewById(R.id.rocket);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +92,28 @@ public class MainActivity extends AppCompatActivity {
         hint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "No Hint Available", Toast.LENGTH_SHORT).show();
+                //edit here
+                if (click < allowedHint && hint1 == 10){
+                    click++;
+                    Random r = new Random();
+                    hint1 = r.nextInt(4);
+                    tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase() );
+                    tvList.get(hint1).setTextColor(getResources().getColor(R.color.colorGrey) );
+                }
+                else if (click < allowedHint){
+                    click++;
+                    Random r = new Random();
+                    hint2 = r.nextInt(4);
+                    while (hint1 == hint2){
+                        hint2 = r.nextInt(4);
+                    }
+                    tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase() );
+                    tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey) );
+                }
+                else {
+                    hint.setVisibility(View.INVISIBLE);
+                    Toast.makeText(MainActivity.this, "No More Hints in This Level", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -86,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ans1.setText(default_ques);   ans2.setText(default_ques);   ans3.setText(default_ques);   ans4.setText(default_ques);
-                show_n_remove();
+                reset();
             }
         });
 
@@ -105,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         if (word == null){
             for (int i = 0; i < 8; i++){
                 btns.get(i).setText("");
+                vanish();
                 hasEnd = true;
             }
             return;
@@ -124,86 +159,85 @@ public class MainActivity extends AppCompatActivity {
         op1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOutputChar(op1.getText().toString());
+                setOutputChar(op1.getText().toString(), pointer);
                 hide_n_add(v);
+                pointer++;
             }
         });
 
         op2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOutputChar(op2.getText().toString());
+                setOutputChar(op2.getText().toString(), pointer);
                 hide_n_add(v);
+                pointer++;
             }
         });
 
         op3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOutputChar(op3.getText().toString());
+                setOutputChar(op3.getText().toString(), pointer);
                 hide_n_add(v);
+                pointer++;
             }
         });
 
         op4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOutputChar(op4.getText().toString());
+                setOutputChar(op4.getText().toString(), pointer);
                 hide_n_add(v);
+                pointer++;
             }
         });
 
         op5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOutputChar(op5.getText().toString());
+                setOutputChar(op5.getText().toString(), pointer);
                 hide_n_add(v);
+                pointer++;
             }
         });
 
         op6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOutputChar(op6.getText().toString());
+                setOutputChar(op6.getText().toString(), pointer);
                 hide_n_add(v);
+                pointer++;
             }
         });
 
         op7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOutputChar(op7.getText().toString());
+                setOutputChar(op7.getText().toString(), pointer);
                 hide_n_add(v);
+                pointer++;
             }
         });
 
         op8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setOutputChar(op8.getText().toString());
+                setOutputChar(op8.getText().toString(), pointer);
                 hide_n_add(v);
+                pointer++;
             }
         });
 
     }
 
-    private void setOutputChar(final String key){
+    private void setOutputChar(final String key, int pointer){
 
-        if (ans1.getText().toString().equals(default_ques) && ans2.getText().toString().equals(default_ques) && ans3.getText().toString().equals(default_ques) && ans4.getText().toString().equals(default_ques)){
-            //enter in 1
-            ans1.setText(key);
+        if (pointer > 3) return;
 
-        }else if (ans2.getText().toString().equals(default_ques) && ans3.getText().toString().equals(default_ques) && ans4.getText().toString().equals(default_ques)){
-            //enter in 2
-            ans2.setText(key);
+        tvList.get(pointer).setText(key);
+        tvList.get(pointer).setTextColor(getResources().getColor(R.color.colorBlack) );
 
-        }else if (ans3.getText().toString().equals(default_ques) && ans4.getText().toString().equals(default_ques) ){
-            //enter in 3
-            ans3.setText(key);
-
-        }else{
-            //enter in 4 check for write answer
-            ans4.setText(key);
+        if (pointer == 3){
             String userAns = ans1.getText().toString().concat(ans2.getText().toString()).concat(ans3.getText().toString()).concat(key);
             checkAnswer(userAns);
         }
@@ -238,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             //replay starts and jumble up
+                            pointer = 0;
                             initialise_with(WORDS.get(l), buttonList);
                             dialog.dismiss();
                         }
@@ -250,7 +285,10 @@ public class MainActivity extends AppCompatActivity {
 //                  increase level currently
                             dialog.dismiss();
                             if (l+1 < size){
+                                pointer = 0;
                                 l++;
+                                click = 1;
+                                hint.setVisibility(View.VISIBLE);
                                 initialise_with(WORDS.get(l), buttonList);
                             }
                             else {
@@ -258,10 +296,8 @@ public class MainActivity extends AppCompatActivity {
                                         .setAction("Reset Game", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                                hasEnd = false;
-                                                l = 0;
-                                                level.setText("Level " + (l+1));
-                                                initialise_with(WORDS.get(l), buttonList);
+                                                startActivity(new Intent(MainActivity.this, MainActivity.class));
+                                                finish();
                                             }
                                         })
                                         .setActionTextColor(getResources().getColor(R.color.colorAccent))
@@ -303,6 +339,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             //replay starts
+                            pointer = 0;
+                            initialise_with(WORDS.get(l), buttonList);
                             dialog.dismiss();
                         }
                     });
@@ -322,8 +360,7 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ans1.setText(default_ques);   ans2.setText(default_ques);   ans3.setText(default_ques);   ans4.setText(default_ques);
-                show_n_remove();
+                reset();
             }
         }, 1000);
 
@@ -373,6 +410,42 @@ public class MainActivity extends AppCompatActivity {
             chArray[new_random] = temp;
         }
         return String.valueOf(chArray).toUpperCase();
+
+    }
+
+    private void vanish(){
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setVisibility(View.INVISIBLE);
+            }
+        };
+
+        ans1.setOnClickListener(listener);  ans2.setOnClickListener(listener);
+        ans3.setOnClickListener(listener);  ans4.setOnClickListener(listener);
+
+        hint.setOnClickListener(listener);  reset.setOnClickListener(listener);
+        level.setOnClickListener(listener); back.setOnClickListener(listener);
+
+        rocket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rocket.animate().translationY(-1000).setDuration(800);
+            }
+        });
+
+
+
+    }
+
+    private void reset(){
+        pointer = 0;
+        for (TextView tv : tvList){
+            tv.setText(default_ques);
+            tv.setTextColor(getResources().getColor(R.color.colorBlack));
+            show_n_remove();
+        }
 
     }
 

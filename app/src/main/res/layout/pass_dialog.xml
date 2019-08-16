@@ -98,7 +98,7 @@
                     android:text="@string/replay"
                     android:textAllCaps="true"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="60dp"
@@ -109,7 +109,7 @@
                     android:text="@string/next"
                     android:textAllCaps="true"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
