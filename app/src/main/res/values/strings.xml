@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Jumbled World</string>
+    <string name="question_mark">\?</string>
+    <string name="less_than">&lt;</string>
+    <string name="description">background description</string>
+    <string name="hint">want a hint ?</string>
+    <string name="replay">replay</string>
+    <string name="next">next</string>
+    <string name="reset">reset</string>
+</resources>
