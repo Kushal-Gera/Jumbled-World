@@ -29,13 +29,14 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Button> buttonList;
     ArrayList<String> WORDS;
 
-    Button op1, op2, op3, op4 ,op5 ,op6, op7, op8;
-    TextView ans1, ans2, ans3, ans4;
+    private Button op1, op2, op3, op4 ,op5 ,op6, op7, op8;
+    private TextView ans1, ans2, ans3, ans4;
     TextView back, reset, hint, level;
 
     private static final String default_ques = "?";
     public int l = 0;//  it is level
     public int size;
+    public boolean hasEnd = false;
     Dialog dialog;
 
 
@@ -100,8 +101,10 @@ public class MainActivity extends AppCompatActivity {
     private void initialise_with(final String word, final ArrayList<Button> btns){
 
         if (word == null){
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++){
                 btns.get(i).setText("");
+                hasEnd = true;
+            }
             return;
         }
         char[] chars = generator(word).toCharArray();
@@ -206,7 +209,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkAnswer(final String userAns){
-//        later increase level as well
+
+        if (hasEnd) return;
 
         if (userAns.equalsIgnoreCase(WORDS.get(l)) ){
 //            PASS
@@ -231,7 +235,8 @@ public class MainActivity extends AppCompatActivity {
                     replay1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //replay starts
+                            //replay starts and jumble up
+                            initialise_with(WORDS.get(l), buttonList);
                             dialog.dismiss();
                         }
                     });
@@ -247,10 +252,11 @@ public class MainActivity extends AppCompatActivity {
                                 initialise_with(WORDS.get(l), buttonList);
                             }
                             else {
-                                Snackbar.make(ans1,"Game Ends Here.\nNew Levels Will Come In The Next Update", Snackbar.LENGTH_INDEFINITE)
+                                Snackbar.make(ans1,"Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
                                         .setAction("Reset Game", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
+                                                hasEnd = false;
                                                 l = 0;
                                                 level.setText("Level " + (l+1));
                                                 initialise_with(WORDS.get(l), buttonList);
