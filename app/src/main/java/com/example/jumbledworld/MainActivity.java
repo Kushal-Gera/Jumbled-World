@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     .setAction("Reset Game", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            resetSavedLevel();
                             startActivity(new Intent(MainActivity.this, MainActivity.class));
                             finish();
                         }
