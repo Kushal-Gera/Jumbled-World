@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");
         WORDS.add("when");  WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");
         WORDS.add("dark");  WORDS.add("bird");  WORDS.add("team");  WORDS.add("wine");
-        WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");  WORDS.add("wise");
+        WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");  WORDS.add("sick");
+        WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("wise");
         size = WORDS.size();
 
         //these are the initialisations :(
