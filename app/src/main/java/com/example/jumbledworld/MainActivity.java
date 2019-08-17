@@ -54,18 +54,19 @@ public class MainActivity extends AppCompatActivity {
     int hint2 = 10;         //value to initialise it
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         l = getIntent().getIntExtra(INTENT_LEVEL, 0);
-        Toast.makeText(this, "Level " + (l+1), Toast.LENGTH_SHORT).show();
 
         WORDS = new ArrayList<>();
-        WORDS.add("time");  WORDS.add("come");  WORDS.add("mute");  WORDS.add("kite");
-        WORDS.add("tyre");  WORDS.add("rain");  WORDS.add("when");  WORDS.add("duke");
+        WORDS.add("play");  WORDS.add("rain");
+//        WORDS.add("time");  WORDS.add("come");
+//        WORDS.add("when");  WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");
+//        WORDS.add("dark");  WORDS.add("bird");  WORDS.add("team");  WORDS.add("wine");
+//        WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");  WORDS.add("wise");
         size = WORDS.size();
 
         //these are the initialisations :(
@@ -140,7 +141,22 @@ public class MainActivity extends AppCompatActivity {
         level = findViewById(R.id.level);
         level.setText("Level " + (l+1) );
 
-        initialise_with(WORDS.get(l), buttonList);
+        if (l+1 < size)
+            initialise_with(WORDS.get(l), buttonList);
+        else {
+            Snackbar.make(ans1,"Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Reset Game", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(MainActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(R.color.colorAccent))
+                    .show();
+            initialise_with(null, buttonList);
+            level.setText(getResources().getString(R.string.all_cleared));
+        }
 
 
 
@@ -318,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
                                         .setActionTextColor(getResources().getColor(R.color.colorAccent))
                                         .show();
                                 initialise_with(null, buttonList);
+                                level.setText(getResources().getString(R.string.all_cleared));
                                 return;
                             }
                             level.setText("Level " + (l+1) );

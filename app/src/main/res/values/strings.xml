@@ -7,4 +7,7 @@
     <string name="replay">replay</string>
     <string name="next">next</string>
     <string name="reset">reset</string>
+    <string name="new_game">new game</string>
+    <string name="conti">continue</string>
+    <string name="all_cleared">All Cleared</string>
 </resources>
