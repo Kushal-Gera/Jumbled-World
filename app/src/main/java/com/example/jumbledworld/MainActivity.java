@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button op1, op2, op3, op4 ,op5 ,op6, op7, op8;
     private TextView ans1, ans2, ans3, ans4;
-    TextView back, reset, hint, level;
+    TextView back, reset, hint, level, hintLeft;
     ImageView rocket;
 
     public int click = 1;
@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         WORDS.add("when");  WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");
         WORDS.add("dark");  WORDS.add("bird");  WORDS.add("team");  WORDS.add("wine");
         WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");  WORDS.add("sick");
-        WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("wise");
+        WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("kind");
+        WORDS.add("mail");  WORDS.add("spin");  WORDS.add("toss");  WORDS.add("wise");
         size = WORDS.size();
 
         //these are the initialisations :(
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////////////////
 
         rocket = findViewById(R.id.rocket);
+        hintLeft = findViewById(R.id.hintLeft);
+        hintLeft.setText(String.valueOf(allowedHint - click));
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -95,32 +98,39 @@ public class MainActivity extends AppCompatActivity {
         hint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //edit here
+                //hints here
+
                 if (click < allowedHint && hint1 == 10){
                     click++;
+                    Toast.makeText(MainActivity.this, "hey1", Toast.LENGTH_SHORT).show();
                     Random r = new Random();
                     hint1 = r.nextInt(4);
                     tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase() );
                     tvList.get(hint1).setTextColor(getResources().getColor(R.color.colorGrey) );
+
+                    hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
+                    hintLeft.setText(String.valueOf(allowedHint - click));
                 }
                 else if (click < allowedHint){
                     click++;
+                    Toast.makeText(MainActivity.this, "hey2", Toast.LENGTH_SHORT).show();
                     Random rr = new Random();
-                    hint2 = rr.nextInt(4);
-                    while (hint1 == hint2){
-                        Log.d(TAG, "onClick: values earlier " + hint1 + " and " + hint2);
+                    do {
                         hint2 = rr.nextInt(4);
-                        Log.d(TAG, "onClick: values " + hint1 + " and " + hint2);
-                    }
+                        Log.d(TAG, "onClick: hint : " + hint1 + " and " + hint2 );
+                    } while (hint1 == hint2);
+
                     tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase() );
                     tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey) );
+                    hintLeft.setText(String.valueOf(allowedHint - click));
 
                     hint1 = 10;
-                    hint2 = 10;
+                    hint2 = 100;
 
                 }
                 else {
                     hint.setVisibility(View.INVISIBLE);
+                    hintLeft.setVisibility(View.INVISIBLE);
                     Toast.makeText(MainActivity.this, "No More Hints in This Level", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -137,7 +147,8 @@ public class MainActivity extends AppCompatActivity {
         level = findViewById(R.id.level);
         level.setText("Level " + (l+1) );
 
-        if (l+1 < size)
+
+        if (l < size)
             initialise_with(WORDS.get(l), buttonList);
         else {
             Snackbar.make(ans1,"Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
@@ -316,6 +327,9 @@ public class MainActivity extends AppCompatActivity {
                                 l++;
                                 click = 1;
                                 hint.setVisibility(View.VISIBLE);
+                                hintLeft.setVisibility(View.VISIBLE);
+                                hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_green));
+                                hintLeft.setText(String.valueOf(allowedHint-click));
                                 initialise_with(WORDS.get(l), buttonList);
                             }
                             else {
@@ -341,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
                     clearAns();
 
                 }
-            },300 );
+            },200 );
 
         //******************************************************************************************
         }else {
@@ -456,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
 
         hint.setOnClickListener(listener);  reset.setOnClickListener(listener);
         level.setOnClickListener(listener); back.setOnClickListener(listener);
+        hintLeft.setOnClickListener(listener);
 
         rocket.setOnClickListener(new View.OnClickListener() {
             @Override
