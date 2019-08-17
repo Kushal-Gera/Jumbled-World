@@ -2,6 +2,7 @@ package com.example.jumbledworld;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -26,8 +27,9 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-
-    //add few hints
+    public static final String SHARED_PREF = "shared_pref";
+    public static final String LEVEL_REACHED = "something";
+    public static final String INTENT_LEVEL = "some";
 
     ArrayList<View> arrayList;
     ArrayList<Button> buttonList;
@@ -52,10 +54,14 @@ public class MainActivity extends AppCompatActivity {
     int hint2 = 10;         //value to initialise it
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        l = getIntent().getIntExtra(INTENT_LEVEL, 0);
+        Toast.makeText(this, "Level " + (l+1), Toast.LENGTH_SHORT).show();
 
         WORDS = new ArrayList<>();
         WORDS.add("time");  WORDS.add("come");  WORDS.add("mute");  WORDS.add("kite");
@@ -102,13 +108,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (click < allowedHint){
                     click++;
-                    Random r = new Random();
-                    hint2 = r.nextInt(4);
+                    Random rr = new Random();
+                    hint2 = rr.nextInt(4);
                     while (hint1 == hint2){
-                        hint2 = r.nextInt(4);
+                        Log.d(TAG, "onClick: values earlier " + hint1 + " and " + hint2);
+                        hint2 = rr.nextInt(4);
+                        Log.d(TAG, "onClick: values " + hint1 + " and " + hint2);
                     }
                     tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase() );
                     tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey) );
+
+                    hint1 = 10;
+                    hint2 = 10;
+
                 }
                 else {
                     hint.setVisibility(View.INVISIBLE);
@@ -129,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         level.setText("Level " + (l+1) );
 
         initialise_with(WORDS.get(l), buttonList);
+
 
 
         
@@ -284,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View v) {
 //                  increase level currently
                             dialog.dismiss();
+                            saveData();
                             if (l+1 < size){
                                 pointer = 0;
                                 l++;
@@ -296,6 +310,7 @@ public class MainActivity extends AppCompatActivity {
                                         .setAction("Reset Game", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
+                                                resetSavedLevel();
                                                 startActivity(new Intent(MainActivity.this, MainActivity.class));
                                                 finish();
                                             }
@@ -448,6 +463,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    private void saveData(){
+
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putInt(LEVEL_REACHED, (l+1) );
+        editor.apply();
+
+    }
+
+    private void resetSavedLevel(){
+
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putInt(LEVEL_REACHED , 0);
+        editor.apply();
+
+    }
+
 
 
 
