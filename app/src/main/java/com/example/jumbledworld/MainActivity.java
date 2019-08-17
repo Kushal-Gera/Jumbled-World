@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,9 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -62,11 +58,10 @@ public class MainActivity extends AppCompatActivity {
         l = getIntent().getIntExtra(INTENT_LEVEL, 0);
 
         WORDS = new ArrayList<>();
-        WORDS.add("play");  WORDS.add("rain");
-//        WORDS.add("time");  WORDS.add("come");
-//        WORDS.add("when");  WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");
-//        WORDS.add("dark");  WORDS.add("bird");  WORDS.add("team");  WORDS.add("wine");
-//        WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");  WORDS.add("wise");
+        WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");
+        WORDS.add("when");  WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");
+        WORDS.add("dark");  WORDS.add("bird");  WORDS.add("team");  WORDS.add("wine");
+        WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");  WORDS.add("wise");
         size = WORDS.size();
 
         //these are the initialisations :(
