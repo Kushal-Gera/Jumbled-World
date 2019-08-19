@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/start"
+            android:id="@+id/new_game"
             android:layout_width="180dp"
             android:layout_height="50dp"
             android:layout_marginStart="30dp"

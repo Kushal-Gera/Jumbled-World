@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class ContinueScreen extends AppCompatActivity {
     private static final String TAG = "ContinueScreen";
@@ -15,19 +15,21 @@ public class ContinueScreen extends AppCompatActivity {
     public static final String LEVEL_REACHED = "something";
     public static final String INTENT_LEVEL = "some";
 
-    Button start, cont;
+    Button new_game, cont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_continue_screen);
+        Log.d(TAG, "onClick: Screen continue " );
 
-        start = findViewById(R.id.start);
+        new_game = findViewById(R.id.new_game);
         cont = findViewById(R.id.cont);
 
-        start.setOnClickListener(new View.OnClickListener() {
+        new_game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: in the new_game btn");
                 startActivity(new Intent(ContinueScreen.this, MainActivity.class));
                 finish();
             }
@@ -37,6 +39,7 @@ public class ContinueScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                retrieveData();
+                Log.d(TAG, "onClick: in the cont btn");
                 SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
                 int level = preferences.getInt(LEVEL_REACHED, 0);
 

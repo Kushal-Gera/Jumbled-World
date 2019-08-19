@@ -40,30 +40,35 @@ public class MainActivity extends AppCompatActivity {
     public int click = 1;
     public int pointer = 0;
     public int allowedHint = 3;
+    public static final int first_level_change = 9;
+    public static final int second_level_change = 19;
     private static final String default_ques = "?";
-    public int l = 0;      //  it is level
+    public int l = 0;      //  it is (level-1)
     public int size;
     public boolean hasEnd = false;
     Dialog dialog;
 
     int hint1 = 10;         //just an aribitiary
-    int hint2 = 10;         //value to initialise it
+    int hint2 = 100;         //value to initialise it
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: Screen MAin Activity");
 
+        //get saved level if any else we get default value i.e zero
         l = getIntent().getIntExtra(INTENT_LEVEL, 0);
 
         WORDS = new ArrayList<>();
-        WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");
-        WORDS.add("when");  WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");
-        WORDS.add("dark");  WORDS.add("bird");  WORDS.add("team");  WORDS.add("wine");
-        WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");  WORDS.add("sick");
-        WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("kind");
-        WORDS.add("mail");  WORDS.add("spin");  WORDS.add("toss");  WORDS.add("wise");
+        WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");  WORDS.add("when");
+        WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");  WORDS.add("dark");  WORDS.add("bird");
+        WORDS.add("team");  WORDS.add("wine");  WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");
+        WORDS.add("sick");  WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("kind");
+        WORDS.add("mail");  WORDS.add("spin");  WORDS.add("toss");  WORDS.add("pick");  WORDS.add("sure");
+        WORDS.add("show");  WORDS.add("mind");  WORDS.add("wink");  WORDS.add("line");  WORDS.add("mint");
+        WORDS.add("tank");  WORDS.add("wall");  WORDS.add("hint");  WORDS.add("rice");  WORDS.add("wise");
         size = WORDS.size();
 
         //these are the initialisations :(
@@ -84,8 +89,15 @@ public class MainActivity extends AppCompatActivity {
 
         rocket = findViewById(R.id.rocket);
         hintLeft = findViewById(R.id.hintLeft);
+        if (l+1 > second_level_change){
+            allowedHint = 1;
+            hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
+        }
+        else if (l+1 > first_level_change){
+            allowedHint = 2;
+            hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
+        }
         hintLeft.setText(String.valueOf(allowedHint - click));
-
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if (click < allowedHint && hint1 == 10){
                     click++;
-                    Toast.makeText(MainActivity.this, "hey1", Toast.LENGTH_SHORT).show();
                     Random r = new Random();
                     hint1 = r.nextInt(4);
                     tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase() );
@@ -113,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (click < allowedHint){
                     click++;
-                    Toast.makeText(MainActivity.this, "hey2", Toast.LENGTH_SHORT).show();
                     Random rr = new Random();
                     do {
                         hint2 = rr.nextInt(4);
@@ -322,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
 //                  increase level currently
                             dialog.dismiss();
                             saveData();
+                            // because l+1 is level
                             if (l+1 < size){
                                 pointer = 0;
                                 l++;
@@ -329,6 +340,14 @@ public class MainActivity extends AppCompatActivity {
                                 hint.setVisibility(View.VISIBLE);
                                 hintLeft.setVisibility(View.VISIBLE);
                                 hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_green));
+                                if (l+1 > second_level_change){
+                                    allowedHint = 1;
+                                    hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
+                                }
+                                else if (l+1 > first_level_change){
+                                    allowedHint = 2;
+                                    hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
+                                }
                                 hintLeft.setText(String.valueOf(allowedHint-click));
                                 initialise_with(WORDS.get(l), buttonList);
                             }
@@ -351,7 +370,6 @@ public class MainActivity extends AppCompatActivity {
                             level.setText("Level " + (l+1) );
                         }
                     });
-
                     clearAns();
 
                 }
@@ -391,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
                     clearAns();
 
                 }
-            }, 300);
+            }, 200);
         }
 
 
