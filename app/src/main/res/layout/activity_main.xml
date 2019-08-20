@@ -93,6 +93,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginEnd="12dp"
             android:layout_weight="1"
             android:background="@drawable/tv_bg_plain"
             android:gravity="center"
@@ -105,7 +106,6 @@
             android:id="@+id/ans4"
             android:layout_width="180dp"
             android:layout_height="70dp"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
@@ -145,8 +145,8 @@
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginTop="4dp"
             android:layout_marginStart="2dp"
+            android:layout_marginTop="4dp"
             android:layout_marginBottom="3dp"
             android:layout_weight="1"
             android:background="@drawable/circle_green"
@@ -160,9 +160,9 @@
             android:id="@+id/reset"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_marginStart="60dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="2dp"
-            android:layout_marginStart="60dp"
             android:layout_weight="15"
             android:gravity="end"
             android:maxLines="1"
@@ -171,8 +171,6 @@
             android:textSize="22sp" />
 
     </LinearLayout>
-
-    <!--hint box will be added here later-->
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -248,7 +246,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 

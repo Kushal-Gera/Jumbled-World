@@ -62,13 +62,7 @@ public class MainActivity extends AppCompatActivity {
         l = getIntent().getIntExtra(INTENT_LEVEL, 0);
 
         WORDS = new ArrayList<>();
-        WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");  WORDS.add("when");
-        WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");  WORDS.add("dark");  WORDS.add("bird");
-        WORDS.add("team");  WORDS.add("wine");  WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");
-        WORDS.add("sick");  WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("kind");
-        WORDS.add("mail");  WORDS.add("spin");  WORDS.add("toss");  WORDS.add("pick");  WORDS.add("sure");
-        WORDS.add("show");  WORDS.add("mind");  WORDS.add("wink");  WORDS.add("line");  WORDS.add("mint");
-        WORDS.add("tank");  WORDS.add("wall");  WORDS.add("hint");  WORDS.add("rice");  WORDS.add("wise");
+        addSomeWords();
         size = WORDS.size();
 
         //these are the initialisations :(
@@ -98,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
         }
         hintLeft.setText(String.valueOf(allowedHint - click));
+
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //hints here
-
                 if (click < allowedHint && hint1 == 10){
                     click++;
                     Random r = new Random();
@@ -136,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
                     hint1 = 10;
                     hint2 = 100;
-
                 }
                 else {
                     hint.setVisibility(View.INVISIBLE);
@@ -179,6 +172,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         
+    }
+
+    private void addSomeWords() {
+
+        WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");  WORDS.add("when");
+        WORDS.add("wind");  WORDS.add("dash");  WORDS.add("lock");  WORDS.add("tune");  WORDS.add("fine");
+        WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");  WORDS.add("dark");  WORDS.add("bird");
+        WORDS.add("team");  WORDS.add("wine");  WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");
+        WORDS.add("sick");  WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("kind");
+        WORDS.add("mail");  WORDS.add("spin");  WORDS.add("toss");  WORDS.add("pick");  WORDS.add("sure");
+        WORDS.add("show");  WORDS.add("mind");  WORDS.add("wink");  WORDS.add("line");  WORDS.add("mint");
+        WORDS.add("tank");  WORDS.add("wall");  WORDS.add("hint");  WORDS.add("rice");  WORDS.add("wise");
     }
 
     private void initialise_with(final String word, final ArrayList<Button> btns){
@@ -445,26 +450,26 @@ public class MainActivity extends AppCompatActivity {
     private String generator(final String words){
 
         String new_words = words;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < words.length(); i++) {
 
             int random = new Random().nextInt(26) + 65;
             String ns = String.valueOf( (char) random );
 
             new_words = new_words.concat(ns);
-
         }
         return jumbleUp(new_words).toUpperCase();
 
     }
 
     private String jumbleUp(final String words){
+        int len = words.length();
         char[] chArray = words.toCharArray();
 
         for (int i = 0; i < 20; i++) {
-            int random = new Random().nextInt(8);
+            int random = new Random().nextInt(len);
             char temp = chArray[random];
 
-            int new_random = new Random().nextInt(8);
+            int new_random = new Random().nextInt(len);
             char temp2 = chArray[new_random];
 
             chArray[random] = temp2;
