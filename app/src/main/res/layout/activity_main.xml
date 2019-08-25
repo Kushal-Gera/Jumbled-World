@@ -5,18 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/inner_bg"
+    android:keepScreenOn="true"
     tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/back"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:gravity="center"
-        android:text='@string/less_than'
-        android:textColor="@color/colorWhite"
-        android:textSize="35sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/level"
@@ -34,6 +24,17 @@
         app:layout_constraintStart_toEndOf="@+id/back"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Level 3" />
+
+    <TextView
+        android:id="@+id/back"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:gravity="center"
+        android:text='@string/less_than'
+        android:textColor="@color/colorWhite"
+        android:textSize="35sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/rocket"
@@ -92,8 +93,8 @@
             android:layout_height="70dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="4dp"
             android:layout_marginEnd="12dp"
+            android:layout_marginBottom="4dp"
             android:layout_weight="1"
             android:background="@drawable/tv_bg_plain"
             android:gravity="center"
