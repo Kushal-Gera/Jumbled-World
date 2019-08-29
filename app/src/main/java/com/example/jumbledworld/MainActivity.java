@@ -183,7 +183,8 @@ public class MainActivity extends AppCompatActivity {
         WORDS.add("sick");  WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("kind");
         WORDS.add("mail");  WORDS.add("spin");  WORDS.add("toss");  WORDS.add("pick");  WORDS.add("sure");
         WORDS.add("show");  WORDS.add("mind");  WORDS.add("wink");  WORDS.add("line");  WORDS.add("mint");
-        WORDS.add("tank");  WORDS.add("wall");  WORDS.add("hint");  WORDS.add("rice");  WORDS.add("wise");
+        WORDS.add("tank");  WORDS.add("wall");  WORDS.add("hint");  WORDS.add("rice");  WORDS.add("rock");
+        WORDS.add("rich");  WORDS.add("site");  WORDS.add("wind");  WORDS.add("hole");  WORDS.add("wise");
     }
 
     private void initialise_with(final String word, final ArrayList<Button> btns){
