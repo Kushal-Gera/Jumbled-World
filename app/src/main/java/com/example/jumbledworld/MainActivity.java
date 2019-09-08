@@ -1,5 +1,6 @@
 package com.example.jumbledworld;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     int hint2 = 100;         //value to initialise it
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -333,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
                     ImageView next1 = dialog.findViewById(R.id.next1);
                     next1.setOnClickListener(new View.OnClickListener() {
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void onClick(View v) {
 //                  increase level currently

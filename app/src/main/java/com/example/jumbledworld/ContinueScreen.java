@@ -31,7 +31,6 @@ public class ContinueScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: in the new_game btn");
                 startActivity(new Intent(ContinueScreen.this, MainActivity.class));
-                finish();
             }
         });
 
