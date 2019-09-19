@@ -46,7 +46,6 @@ public class ContinueScreen extends AppCompatActivity {
                 intent.putExtra(INTENT_LEVEL, level);
 
                 startActivity(intent);
-                finish();
             }
         });
 

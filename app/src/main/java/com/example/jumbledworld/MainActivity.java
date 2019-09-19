@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button op1, op2, op3, op4 ,op5 ,op6, op7, op8;
     private TextView ans1, ans2, ans3, ans4;
-    TextView back, reset, hint, level, hintLeft;
+    TextView back, reset, hint, level, hintLeft, easter;
     ImageView rocket;
 
     public int click = 1;
@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
         setAllOptions();
         ///////////////////////////////////////////////////////////////
+
+        easter = findViewById(R.id.easter);
+        easter.setVisibility(View.INVISIBLE);
 
         rocket = findViewById(R.id.rocket);
         hintLeft = findViewById(R.id.hintLeft);
@@ -154,7 +157,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (l < size)
-            initialise_with(WORDS.get(l), buttonList);
+            if (WORDS.get(l) != null)
+                initialise_with(WORDS.get(l), buttonList);
+            else{
+                resetSavedLevel();
+                startActivity(new Intent(MainActivity.this, MainActivity.class));
+                finish();
+                initialise_with(null, buttonList);
+                level.setText(getResources().getString(R.string.all_cleared));
+            }
+
         else {
             Snackbar.make(ans1,"Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Reset Game", new View.OnClickListener() {
@@ -177,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addSomeWords() {
-
         WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");  WORDS.add("when");
         WORDS.add("wind");  WORDS.add("dash");  WORDS.add("lock");  WORDS.add("tune");  WORDS.add("fine");
         WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");  WORDS.add("dark");  WORDS.add("bird");
@@ -485,6 +496,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void vanish(){
 
+        easter.setVisibility(View.VISIBLE);
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -492,12 +505,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        ans1.setOnClickListener(listener);  ans2.setOnClickListener(listener);
-        ans3.setOnClickListener(listener);  ans4.setOnClickListener(listener);
+        ans1.setOnClickListener(listener);       ans2.setOnClickListener(listener);
+        ans3.setOnClickListener(listener);       ans4.setOnClickListener(listener);
 
-        hint.setOnClickListener(listener);  reset.setOnClickListener(listener);
-        level.setOnClickListener(listener); back.setOnClickListener(listener);
-        hintLeft.setOnClickListener(listener);
+        hint.setOnClickListener(listener);       reset.setOnClickListener(listener);
+        level.setOnClickListener(listener);      back.setOnClickListener(listener);
+        easter.setOnClickListener(listener);     hintLeft.setOnClickListener(listener);
 
         rocket.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -539,9 +552,6 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
     }
-
-
-
 
 
 
