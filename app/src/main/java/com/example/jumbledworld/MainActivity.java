@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     int hint1 = 10;         //just an aribitiary
     int hint2 = 100;         //value to initialise it
 
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,37 +109,13 @@ public class MainActivity extends AppCompatActivity {
         hint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //hints here
-                if (click < allowedHint && hint1 == 10){
-                    click++;
-                    Random r = new Random();
-                    hint1 = r.nextInt(4);
-                    tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase() );
-                    tvList.get(hint1).setTextColor(getResources().getColor(R.color.colorGrey) );
-
-                    hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
-                    hintLeft.setText(String.valueOf(allowedHint - click));
-                }
-                else if (click < allowedHint){
-                    click++;
-                    Random rr = new Random();
-                    do {
-                        hint2 = rr.nextInt(4);
-                        Log.d(TAG, "onClick: hint : " + hint1 + " and " + hint2 );
-                    } while (hint1 == hint2);
-
-                    tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase() );
-                    tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey) );
-                    hintLeft.setText(String.valueOf(allowedHint - click));
-
-                    hint1 = 10;
-                    hint2 = 100;
-                }
-                else {
-                    hint.setVisibility(View.INVISIBLE);
-                    hintLeft.setVisibility(View.INVISIBLE);
-                    Toast.makeText(MainActivity.this, "No More Hints in This Level", Toast.LENGTH_SHORT).show();
-                }
+                hint_func();
+            }
+        });
+        hintLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hint_func();
             }
         });
 
@@ -166,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
                 initialise_with(null, buttonList);
                 level.setText(getResources().getString(R.string.all_cleared));
             }
-
         else {
             Snackbar.make(ans1,"Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Reset Game", new View.OnClickListener() {
@@ -214,6 +188,42 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < chars.length; i++)
             btns.get(i).setText( String.valueOf(chars[i]) );
+
+    }
+
+    private void hint_func() {
+
+        //hints here
+        if (click < allowedHint && hint1 == 10){
+            click++;
+            Random r = new Random();
+            hint1 = r.nextInt(4);
+            tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase() );
+            tvList.get(hint1).setTextColor(getResources().getColor(R.color.colorGrey) );
+
+            hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
+            hintLeft.setText(String.valueOf(allowedHint - click));
+        }
+        else if (click < allowedHint){
+            click++;
+            Random rr = new Random();
+            do {
+                hint2 = rr.nextInt(4);
+                Log.d(TAG, "onClick: hint : " + hint1 + " and " + hint2 );
+            } while (hint1 == hint2);
+
+            tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase() );
+            tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey) );
+            hintLeft.setText(String.valueOf(allowedHint - click));
+
+            hint1 = 10;
+            hint2 = 100;
+        }
+        else {
+            hint.setVisibility(View.INVISIBLE);
+            hintLeft.setVisibility(View.INVISIBLE);
+            Toast.makeText(MainActivity.this, "No More Hints in This Level", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
