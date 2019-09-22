@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/inner_bg"
+    android:background="@drawable/bg2"
     tools:context=".ContinueScreen">
 
     <TextView
@@ -15,11 +15,9 @@
         android:gravity="center"
         android:text="Jumbled\nWorld"
         android:textAllCaps="true"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorWhite"
         android:textSize="45sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
@@ -43,7 +41,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="70dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bg_new"
+            android:background="@drawable/btn_bg"
             android:text="@string/new_game"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
@@ -58,7 +56,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="70dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_bg_new"
+            android:background="@drawable/btn_bg"
             android:text="@string/conti"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
