@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
             click++;
             Random r = new Random();
             hint1 = r.nextInt(4);
+            reset();
             tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase() );
             tvList.get(hint1).setTextColor(getResources().getColor(R.color.colorGrey) );
 
@@ -406,7 +407,8 @@ public class MainActivity extends AppCompatActivity {
             },200 );
 
         //******************************************************************************************
-        }else {
+        }
+        else {
 //            FAIL
             Handler h = new Handler();
             h.postDelayed(new Runnable() {
