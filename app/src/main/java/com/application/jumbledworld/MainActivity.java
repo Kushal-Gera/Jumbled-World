@@ -309,12 +309,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOutputChar(final String key, int pointer){
 
-        if (pointer > 3) return;
+        if (pointer > WORDS.get(l).length()-1 ) return;
 
         tvList.get(pointer).setText(key);
         tvList.get(pointer).setTextColor(getResources().getColor(R.color.colorBlack) );
 
-        if (pointer == 3){
+        if (pointer == WORDS.get(l).length()-1 ){
             String userAns = ans1.getText().toString().concat(ans2.getText().toString()).concat(ans3.getText().toString()).concat(key);
             checkAnswer(userAns);
         }
