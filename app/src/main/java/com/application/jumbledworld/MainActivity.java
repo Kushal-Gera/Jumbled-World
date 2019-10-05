@@ -1,4 +1,4 @@
-package com.example.jumbledworld;
+package com.application.jumbledworld;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean hasEnd = false;
     Dialog dialog;
 
-    int hint1 = 10;         //just an aribitiary
+    int hint1 = 10;         //just an random
     int hint2 = 100;         //value to initialise it
 
     @SuppressLint("SetTextI18n")
@@ -331,7 +331,6 @@ public class MainActivity extends AppCompatActivity {
             h1.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
                     dialog.setContentView(R.layout.pass_dialog);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.show();

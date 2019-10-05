@@ -1,4 +1,4 @@
-package com.example.jumbledworld;
+package com.application.jumbledworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -60,6 +60,7 @@ public class ContinueScreen extends AppCompatActivity {
                         Intent intent = new Intent(ContinueScreen.this, MainActivity.class);
                         intent.putExtra(INTENT_LEVEL, level);
                         startActivity(intent);
+                        finish();
                     }
 
                 });

@@ -11,4 +11,7 @@
     <string name="conti">continue</string>
     <string name="all_cleared">All Cleared</string>
     <string name="easter_unlocked">Easter Egg Unlocked... Tap Here and there</string>
+    <string name="you_have_failed_this_level">You Have Failed This Level</string>
+    <string name="you_have_passed_this_level">You Have Passed This Level</string>
+    <string name="congo">Congratulations</string>
 </resources>

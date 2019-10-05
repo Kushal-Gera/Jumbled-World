@@ -1,4 +1,4 @@
-package com.example.jumbledworld;
+package com.application.jumbledworld;
 
 import android.content.Context;
 

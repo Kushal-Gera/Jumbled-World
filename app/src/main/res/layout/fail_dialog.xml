@@ -44,12 +44,15 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="25sp" />
 
-            <ImageView
-                android:contentDescription="@string/description"
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_gravity="center"
+                android:id="@+id/animation_view"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:src="@drawable/error" />
+                android:padding="-10dp"
+                app:lottie_rawRes="@raw/cross"
+                app:lottie_loop="false"
+                app:lottie_autoPlay="true" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -58,7 +61,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="10dp"
                 android:gravity="center"
-                android:text="You Have Failed This Level"
+                android:text="@string/you_have_failed_this_level"
                 android:textSize="22sp" />
 
             <ImageView
