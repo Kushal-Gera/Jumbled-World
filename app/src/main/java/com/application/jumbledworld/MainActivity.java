@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final String TAG = "MainActivity";
     public static final String SHARED_PREF = "shared_pref";
     public static final String LEVEL_REACHED = "something";
@@ -33,16 +36,16 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<TextView> tvList;
     ArrayList<String> WORDS;
 
-    private Button op1, op2, op3, op4 ,op5 ,op6, op7, op8;
+    private Button op1, op2, op3, op4, op5, op6, op7, op8;
     private TextView ans1, ans2, ans3, ans4;
-    TextView back, reset, hint, level, hintLeft, easter;
+    TextView reset, hint, level, hintLeft, easter;
     ImageView rocket;
 
     public int click = 1;
     public int pointer = 0;
     public int allowedHint = 3;
-    public static final int first_level_change = 9;
-    public static final int second_level_change = 19;
+    public static final int first_level_change = 9;     // reduce hint by one i.e hint =- 1
+    public static final int second_level_change = 19;   // reduce hint by one i.e hint =- 1
     private static final String default_ques = "?";
     public int l = 0;      //  it is (level-1)
     public int size;
@@ -59,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: Screen MAin Activity");
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS );
+        }
+
         //get saved level if any else we get default value i.e zero
         l = getIntent().getIntExtra(INTENT_LEVEL, 0);
 
@@ -67,17 +75,28 @@ public class MainActivity extends AppCompatActivity {
         size = WORDS.size();
 
         //these are the initialisations :(
-        op1 = findViewById(R.id.op1);   op2 = findViewById(R.id.op2);   op3 = findViewById(R.id.op3);   op4 = findViewById(R.id.op4);
-        op5 = findViewById(R.id.op5);   op6 = findViewById(R.id.op6);   op7 = findViewById(R.id.op7);   op8 = findViewById(R.id.op8);
+        op1 = findViewById(R.id.op1);
+        op2 = findViewById(R.id.op2);
+        op3 = findViewById(R.id.op3);
+        op4 = findViewById(R.id.op4);
+        op5 = findViewById(R.id.op5);
+        op6 = findViewById(R.id.op6);
+        op7 = findViewById(R.id.op7);
+        op8 = findViewById(R.id.op8);
 
-        ans1 = findViewById(R.id.ans1);   ans2 = findViewById(R.id.ans2);
-        ans3 = findViewById(R.id.ans3);   ans4 = findViewById(R.id.ans4);
+        ans1 = findViewById(R.id.ans1);
+        ans2 = findViewById(R.id.ans2);
+        ans3 = findViewById(R.id.ans3);
+        ans4 = findViewById(R.id.ans4);
 
         dialog = new Dialog(this);
         arrayList = new ArrayList<>();
         buttonList = new ArrayList<>();
         tvList = new ArrayList<>();
-        tvList.add(ans1);   tvList.add(ans2);   tvList.add(ans3);   tvList.add(ans4);
+        tvList.add(ans1);
+        tvList.add(ans2);
+        tvList.add(ans3);
+        tvList.add(ans4);
 
         setAllOptions();
         ///////////////////////////////////////////////////////////////
@@ -87,23 +106,14 @@ public class MainActivity extends AppCompatActivity {
 
         rocket = findViewById(R.id.rocket);
         hintLeft = findViewById(R.id.hintLeft);
-        if (l+1 > second_level_change){
+        if (l + 1 > second_level_change) {
             allowedHint = 1;
             hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
-        }
-        else if (l+1 > first_level_change){
+        } else if (l + 1 > first_level_change) {
             allowedHint = 2;
             hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
         }
         hintLeft.setText(String.valueOf(allowedHint - click));
-
-        back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
         hint = findViewById(R.id.hint);
         hint.setOnClickListener(new View.OnClickListener() {
@@ -128,13 +138,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         level = findViewById(R.id.level);
-        level.setText("Level " + (l+1) );
+        level.setText("Level " + (l + 1));
 
 
         if (l < size)
             if (WORDS.get(l) != null)
                 initialise_with(WORDS.get(l), buttonList);
-            else{
+            else {
                 resetSavedLevel();
                 startActivity(new Intent(MainActivity.this, MainActivity.class));
                 finish();
@@ -142,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 level.setText(getResources().getString(R.string.all_cleared));
             }
         else {
-            Snackbar.make(ans1,"Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(ans1, "Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Reset Game", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -158,8 +168,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-        
     }
 
     private void addSomeWords() {
@@ -171,13 +179,15 @@ public class MainActivity extends AppCompatActivity {
         WORDS.add("mail");  WORDS.add("spin");  WORDS.add("toss");  WORDS.add("pick");  WORDS.add("sure");
         WORDS.add("show");  WORDS.add("mind");  WORDS.add("wink");  WORDS.add("line");  WORDS.add("mint");
         WORDS.add("tank");  WORDS.add("wall");  WORDS.add("hint");  WORDS.add("rice");  WORDS.add("rock");
+        WORDS.add("dice");  WORDS.add("bike");  WORDS.add("kick");  WORDS.add("swim");  WORDS.add("hint");
+        WORDS.add("dine");  WORDS.add("show");  WORDS.add("wall");  WORDS.add("blow");  WORDS.add("mock");
         WORDS.add("rich");  WORDS.add("site");  WORDS.add("wind");  WORDS.add("hole");  WORDS.add("wise");
     }
 
-    private void initialise_with(final String word, final ArrayList<Button> btns){
+    private void initialise_with(final String word, final ArrayList<Button> btns) {
 
-        if (word == null){
-            for (int i = 0; i < 8; i++){
+        if (word == null) {
+            for (int i = 0; i < 8; i++) {
                 btns.get(i).setText("");
                 vanish();
                 hasEnd = true;
@@ -187,40 +197,41 @@ public class MainActivity extends AppCompatActivity {
         char[] chars = generator(word).toCharArray();
 
         for (int i = 0; i < chars.length; i++)
-            btns.get(i).setText( String.valueOf(chars[i]) );
+            btns.get(i).setText(String.valueOf(chars[i]));
 
     }
 
     private void hint_func() {
+//        ALL hints here
 
-        //hints here
-        if (click < allowedHint && hint1 == 10){
+        if (click < allowedHint && hint1 == 10) {
+//             2 hints left
             click++;
             Random r = new Random();
             hint1 = r.nextInt(4);
             reset();
-            tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase() );
-            tvList.get(hint1).setTextColor(getResources().getColor(R.color.colorGrey) );
+            tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase());
+            tvList.get(hint1).setTextColor(getResources().getColor(R.color.colorGrey));
 
             hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
             hintLeft.setText(String.valueOf(allowedHint - click));
-        }
-        else if (click < allowedHint){
+        } else if (click < allowedHint) {
+//             1 hint left
             click++;
             Random rr = new Random();
             do {
                 hint2 = rr.nextInt(4);
-                Log.d(TAG, "onClick: hint : " + hint1 + " and " + hint2 );
+                Log.d(TAG, "onClick: hint : " + hint1 + " and " + hint2);
             } while (hint1 == hint2);
 
-            tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase() );
-            tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey) );
+            tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase());
+            tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey));
             hintLeft.setText(String.valueOf(allowedHint - click));
 
             hint1 = 10;
             hint2 = 100;
-        }
-        else {
+        } else {
+//             0 hint left
             hint.setVisibility(View.INVISIBLE);
             hintLeft.setVisibility(View.INVISIBLE);
             Toast.makeText(MainActivity.this, "No More Hints in This Level", Toast.LENGTH_SHORT).show();
@@ -228,10 +239,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setAllOptions(){
+    private void setAllOptions() {
 
-        buttonList.add(op1);        buttonList.add(op2);        buttonList.add(op3);        buttonList.add(op4);
-        buttonList.add(op5);        buttonList.add(op6);        buttonList.add(op7);        buttonList.add(op8);
+        buttonList.add(op1);
+        buttonList.add(op2);
+        buttonList.add(op3);
+        buttonList.add(op4);
+        buttonList.add(op5);
+        buttonList.add(op6);
+        buttonList.add(op7);
+        buttonList.add(op8);
 
         op1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -307,25 +324,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setOutputChar(final String key, int pointer){
+    private void setOutputChar(final String key, int pointer) {
 
-        if (pointer > WORDS.get(l).length()-1 ) return;
+        if (pointer > WORDS.get(l).length() - 1) return;
 
         tvList.get(pointer).setText(key);
-        tvList.get(pointer).setTextColor(getResources().getColor(R.color.colorBlack) );
+        tvList.get(pointer).setTextColor(getResources().getColor(R.color.colorBlack));
 
-        if (pointer == WORDS.get(l).length()-1 ){
+        if (pointer == WORDS.get(l).length() - 1) {
             String userAns = ans1.getText().toString().concat(ans2.getText().toString()).concat(ans3.getText().toString()).concat(key);
             checkAnswer(userAns);
         }
 
     }
 
-    private void checkAnswer(final String userAns){
+    private void checkAnswer(final String userAns) {
 
         if (hasEnd) return;
 
-        if (userAns.equalsIgnoreCase(WORDS.get(l)) ){
+        if (userAns.equalsIgnoreCase(WORDS.get(l))) {
 //            PASS
             Handler h1 = new Handler();
             h1.postDelayed(new Runnable() {
@@ -363,26 +380,24 @@ public class MainActivity extends AppCompatActivity {
                             dialog.dismiss();
                             saveData();
                             // because l+1 is level
-                            if (l+1 < size){
+                            if (l + 1 < size) {
                                 pointer = 0;
                                 l++;
                                 click = 1;
                                 hint.setVisibility(View.VISIBLE);
                                 hintLeft.setVisibility(View.VISIBLE);
                                 hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_green));
-                                if (l+1 > second_level_change){
+                                if (l + 1 > second_level_change) {
                                     allowedHint = 1;
                                     hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
-                                }
-                                else if (l+1 > first_level_change){
+                                } else if (l + 1 > first_level_change) {
                                     allowedHint = 2;
                                     hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
                                 }
-                                hintLeft.setText(String.valueOf(allowedHint-click));
+                                hintLeft.setText(String.valueOf(allowedHint - click));
                                 initialise_with(WORDS.get(l), buttonList);
-                            }
-                            else {
-                                Snackbar.make(ans1,"Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
+                            } else {
+                                Snackbar.make(ans1, "Game Ends Here..", Snackbar.LENGTH_INDEFINITE)
                                         .setAction("Reset Game", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -397,17 +412,16 @@ public class MainActivity extends AppCompatActivity {
                                 level.setText(getResources().getString(R.string.all_cleared));
                                 return;
                             }
-                            level.setText("Level " + (l+1) );
+                            level.setText("Level " + (l + 1));
                         }
                     });
                     clearAns();
 
                 }
-            },200 );
+            }, 200);
 
-        //******************************************************************************************
-        }
-        else {
+            //******************************************************************************************
+        } else {
 //            FAIL
             Handler h = new Handler();
             h.postDelayed(new Runnable() {
@@ -446,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void clearAns(){
+    private void clearAns() {
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -458,14 +472,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void hide_n_add(View v){
+    private void hide_n_add(View v) {
 
         v.setVisibility(View.INVISIBLE);
         arrayList.add(v);
 
     }
 
-    private void show_n_remove(){
+    private void show_n_remove() {
 
         for (View v : arrayList)
             v.setVisibility(View.VISIBLE);
@@ -473,13 +487,13 @@ public class MainActivity extends AppCompatActivity {
         arrayList.clear();
     }
 
-    private String generator(final String words){
+    private String generator(final String words) {
 
         String new_words = words;
         for (int i = 0; i < words.length(); i++) {
 
             int random = new Random().nextInt(26) + 65;
-            String ns = String.valueOf( (char) random );
+            String ns = String.valueOf((char) random);
 
             new_words = new_words.concat(ns);
         }
@@ -487,7 +501,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String jumbleUp(final String words){
+    private String jumbleUp(final String words) {
         int len = words.length();
         char[] chArray = words.toCharArray();
 
@@ -505,7 +519,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void vanish(){
+    private void vanish() {
 
         easter.setVisibility(View.VISIBLE);
 
@@ -516,12 +530,16 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        ans1.setOnClickListener(listener);       ans2.setOnClickListener(listener);
-        ans3.setOnClickListener(listener);       ans4.setOnClickListener(listener);
+        ans1.setOnClickListener(listener);
+        ans2.setOnClickListener(listener);
+        ans3.setOnClickListener(listener);
+        ans4.setOnClickListener(listener);
 
-        hint.setOnClickListener(listener);       reset.setOnClickListener(listener);
-        level.setOnClickListener(listener);      back.setOnClickListener(listener);
-        easter.setOnClickListener(listener);     hintLeft.setOnClickListener(listener);
+        hint.setOnClickListener(listener);
+        reset.setOnClickListener(listener);
+        level.setOnClickListener(listener);
+        easter.setOnClickListener(listener);
+        hintLeft.setOnClickListener(listener);
 
         rocket.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -531,12 +549,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
     }
 
-    private void reset(){
+    private void reset() {
         pointer = 0;
-        for (TextView tv : tvList){
+        for (TextView tv : tvList) {
             tv.setText(default_ques);
             tv.setTextColor(getResources().getColor(R.color.colorBlack));
             show_n_remove();
@@ -544,27 +561,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void saveData(){
+    private void saveData() {
 
         SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putInt(LEVEL_REACHED, (l+1) );
+        editor.putInt(LEVEL_REACHED, (l + 1));
         editor.apply();
 
     }
 
-    private void resetSavedLevel(){
+    private void resetSavedLevel() {
 
         SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putInt(LEVEL_REACHED , 0);
+        editor.putInt(LEVEL_REACHED, 0);
         editor.apply();
 
     }
-
-
 
 
 }
