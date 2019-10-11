@@ -19,12 +19,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RewardedVideoAdListener {
 
     private static final String TAG = "MainActivity";
     public static final String SHARED_PREF = "shared_pref";
@@ -42,15 +48,20 @@ public class MainActivity extends AppCompatActivity {
     ImageView rocket;
 
     public int click = 1;
+    public int temp1 = 11;
     public int pointer = 0;
     public int allowedHint = 3;
-    public static final int first_level_change = 9;     // reduce hint by one i.e hint =- 1
-    public static final int second_level_change = 19;   // reduce hint by one i.e hint =- 1
+    public static final int first_level_change = 4;     // reduce hint by one i.e hint =- 1
+    public static final int second_level_change = 12;   // reduce hint by one i.e hint =- 1
     private static final String default_ques = "?";
     public int l = 0;      //  it is (level-1)
     public int size;
     public boolean hasEnd = false;
     Dialog dialog;
+
+    private RewardedVideoAd mRewardVideoAd;
+    private AdView adView;
+    AdRequest request;
 
     int hint1 = 10;         //just an random
     int hint2 = 100;         //value to initialise it
@@ -62,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: Screen MAin Activity");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS );
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
         //get saved level if any else we get default value i.e zero
@@ -75,14 +86,10 @@ public class MainActivity extends AppCompatActivity {
         size = WORDS.size();
 
         //these are the initialisations :(
-        op1 = findViewById(R.id.op1);
-        op2 = findViewById(R.id.op2);
-        op3 = findViewById(R.id.op3);
-        op4 = findViewById(R.id.op4);
-        op5 = findViewById(R.id.op5);
-        op6 = findViewById(R.id.op6);
-        op7 = findViewById(R.id.op7);
-        op8 = findViewById(R.id.op8);
+        op1 = findViewById(R.id.op1);           op5 = findViewById(R.id.op5);
+        op2 = findViewById(R.id.op2);           op6 = findViewById(R.id.op6);
+        op3 = findViewById(R.id.op3);           op7 = findViewById(R.id.op7);
+        op4 = findViewById(R.id.op4);           op8 = findViewById(R.id.op8);
 
         ans1 = findViewById(R.id.ans1);
         ans2 = findViewById(R.id.ans2);
@@ -167,9 +174,17 @@ public class MainActivity extends AppCompatActivity {
             level.setText(getResources().getString(R.string.all_cleared));
         }
 
+        //ad stuff starts here.....
+        mRewardVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardVideoAd.setRewardedVideoAdListener(this);
+        loadRewardedVideoAd();
 
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        adView = findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
     }
 
+// main game logic is down belowww.....
     private void addSomeWords() {
         WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");  WORDS.add("when");
         WORDS.add("wind");  WORDS.add("dash");  WORDS.add("lock");  WORDS.add("tune");  WORDS.add("fine");
@@ -202,39 +217,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void hint_func() {
-//        ALL hints here
+//        all hints go here
 
         if (click < allowedHint && hint1 == 10) {
 //             2 hints left
             click++;
             Random r = new Random();
             hint1 = r.nextInt(4);
-            reset();
             tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase());
             tvList.get(hint1).setTextColor(getResources().getColor(R.color.colorGrey));
 
             hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
             hintLeft.setText(String.valueOf(allowedHint - click));
-        } else if (click < allowedHint) {
+        }
+        else if (click < allowedHint) {
 //             1 hint left
             click++;
             Random rr = new Random();
             do {
                 hint2 = rr.nextInt(4);
                 Log.d(TAG, "onClick: hint : " + hint1 + " and " + hint2);
-            } while (hint1 == hint2);
+            } while (hint1 == hint2 || hint2 == temp1);
 
             tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase());
             tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey));
             hintLeft.setText(String.valueOf(allowedHint - click));
 
-            hint1 = 10;
-            hint2 = 100;
-        } else {
+            temp1 = hint2;
+        }
+        else {
 //             0 hint left
-            hint.setVisibility(View.INVISIBLE);
-            hintLeft.setVisibility(View.INVISIBLE);
-            Toast.makeText(MainActivity.this, "No More Hints in This Level", Toast.LENGTH_SHORT).show();
+            if (mRewardVideoAd.isLoaded())
+                mRewardVideoAd.show();
+            else
+                loadRewardedVideoAd();
         }
 
     }
@@ -384,6 +400,8 @@ public class MainActivity extends AppCompatActivity {
                                 pointer = 0;
                                 l++;
                                 click = 1;
+                                hint1 =10; hint2 =100; temp1 = 11;
+                                adView.loadAd(new AdRequest.Builder().build());
                                 hint.setVisibility(View.VISIBLE);
                                 hintLeft.setVisibility(View.VISIBLE);
                                 hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_green));
@@ -440,6 +458,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
+                    adView.loadAd(new AdRequest.Builder().build());
                     ImageView replay = dialog.findViewById(R.id.replay);
                     replay.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -580,6 +599,81 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
     }
+
+
+//    ***********************************************************
+//    all add stufffff is down belowww.....
+    private void loadRewardedVideoAd() {
+//        to be changed here
+        if (!mRewardVideoAd.isLoaded()){
+            mRewardVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+                    new AdRequest.Builder().build());
+        }
+    }
+
+    @Override
+    public void onRewardedVideoAdLoaded() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+        loadRewardedVideoAd();
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+
+        click--;
+        hintLeft.setText(String.valueOf(allowedHint - click));
+
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+        Toast.makeText(this, "No Internet\nExtra hints can't be fetched", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRewardedVideoCompleted() {
+
+    }
+
+    @Override
+    public void onResume() {
+        mRewardVideoAd.resume(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mRewardVideoAd.pause(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mRewardVideoAd.destroy(this);
+        super.onDestroy();
+    }
+
+
+
 
 
 }

@@ -14,4 +14,6 @@
     <string name="you_have_failed_this_level">You Have Failed This Level</string>
     <string name="you_have_passed_this_level">You Have Passed This Level</string>
     <string name="congo">Congratulations</string>
+    <string name="app_ID">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="ad_ID">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
