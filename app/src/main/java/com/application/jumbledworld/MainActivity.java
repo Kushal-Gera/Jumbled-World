@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
     private RewardedVideoAd mRewardVideoAd;
     private AdView adView;
-    AdRequest request;
 
     int hint1 = 10;         //just an random
     int hint2 = 100;         //value to initialise it
@@ -174,12 +173,13 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             level.setText(getResources().getString(R.string.all_cleared));
         }
 
-        //ad stuff starts here.....
+
+//        ad stuff starts here.....
         mRewardVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardVideoAd.setRewardedVideoAdListener(this);
         loadRewardedVideoAd();
 
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, "ca-app-pub-5073642246912223/5273510819");
         adView = findViewById(R.id.adView);
         adView.loadAd(new AdRequest.Builder().build());
     }
@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             tvList.get(hint2).setText(String.valueOf(WORDS.get(l).charAt(hint2)).toUpperCase());
             tvList.get(hint2).setTextColor(getResources().getColor(R.color.colorGrey));
             hintLeft.setText(String.valueOf(allowedHint - click));
+            hint.setText("more hints ?");
 
             temp1 = hint2;
         }
@@ -400,8 +401,9 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                                 pointer = 0;
                                 l++;
                                 click = 1;
-                                hint1 =10; hint2 =100; temp1 = 11;
                                 adView.loadAd(new AdRequest.Builder().build());
+                                hint1 =10; hint2 =100; temp1 = 11;
+                                hint.setText("want a hint ?");
                                 hint.setVisibility(View.VISIBLE);
                                 hintLeft.setVisibility(View.VISIBLE);
                                 hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_green));
@@ -439,7 +441,9 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             }, 200);
 
             //******************************************************************************************
-        } else {
+        }
+
+        else {
 //            FAIL
             Handler h = new Handler();
             h.postDelayed(new Runnable() {
@@ -449,6 +453,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                     dialog.setContentView(R.layout.fail_dialog);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.show();
+                    adView.loadAd(new AdRequest.Builder().build());
 
                     ImageView close = dialog.findViewById(R.id.close);
                     close.setOnClickListener(new View.OnClickListener() {
@@ -458,7 +463,6 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                         }
                     });
 
-                    adView.loadAd(new AdRequest.Builder().build());
                     ImageView replay = dialog.findViewById(R.id.replay);
                     replay.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -475,7 +479,6 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                 }
             }, 200);
         }
-
 
     }
 
@@ -601,12 +604,11 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
     }
 
 
-//    ***********************************************************
 //    all add stufffff is down belowww.....
     private void loadRewardedVideoAd() {
 //        to be changed here
         if (!mRewardVideoAd.isLoaded()){
-            mRewardVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+            mRewardVideoAd.loadAd("ca-app-pub-5073642246912223/5368045435",
                     new AdRequest.Builder().build());
         }
     }
@@ -636,6 +638,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
         click--;
         hintLeft.setText(String.valueOf(allowedHint - click));
+        loadRewardedVideoAd();
 
     }
 
@@ -646,7 +649,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
-        Toast.makeText(this, "No Internet\nExtra hints can't be fetched", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "No Internet\nExtra hints won't be fetched", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -654,15 +657,17 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
     }
 
+
+
     @Override
     public void onResume() {
-        mRewardVideoAd.resume(this);
+//        mRewardVideoAd.resume(this);
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        mRewardVideoAd.pause(this);
+//        mRewardVideoAd.destroy(this);
         super.onPause();
     }
 
