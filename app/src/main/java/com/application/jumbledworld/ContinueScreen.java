@@ -12,6 +12,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
 public class ContinueScreen extends AppCompatActivity {
     private static final String TAG = "ContinueScreen";
     public static final String SHARED_PREF = "shared_pref";
@@ -35,38 +39,56 @@ public class ContinueScreen extends AppCompatActivity {
         new_game = findViewById(R.id.new_game);
         cont = findViewById(R.id.cont);
 
-        Handler h = new Handler();
-        h.post(new Runnable() {
+        final InterstitialAd interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-5073642246912223/1171603950");
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+        interstitialAd.setAdListener(new AdListener(){
+
             @Override
-            public void run() {
+            public void onAdClosed() {
+                SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+                int level = preferences.getInt(LEVEL_REACHED, 0);
 
-                new_game.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "onClick: in the new_game btn");
-                        startActivity(new Intent(ContinueScreen.this, MainActivity.class));
-                    }
-                });
+                Intent intent = new Intent(ContinueScreen.this, MainActivity.class);
+                intent.putExtra(INTENT_LEVEL, level);
+                startActivity(intent);
+                finish();
 
-                //just added handler for the new thread and hence smoother animations!!!
-                cont.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "onClick: in the cont btn");
-
-                        SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-                        int level = preferences.getInt(LEVEL_REACHED, 0);
-
-                        Intent intent = new Intent(ContinueScreen.this, MainActivity.class);
-                        intent.putExtra(INTENT_LEVEL, level);
-                        startActivity(intent);
-                        finish();
-                    }
-
-                });
-
+                interstitialAd.loadAd(new AdRequest.Builder().build());
             }
         });
+
+        new_game.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: in the new_game btn");
+                startActivity(new Intent(ContinueScreen.this, MainActivity.class));
+            }
+        });
+
+        //just added handler for the new thread and hence smoother animations!!!
+        cont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: in the cont btn");
+
+                if (interstitialAd.isLoaded())
+                    interstitialAd.show();
+                else {
+
+                    SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+                    int level = preferences.getInt(LEVEL_REACHED, 0);
+
+                    Intent intent = new Intent(ContinueScreen.this, MainActivity.class);
+                    intent.putExtra(INTENT_LEVEL, level);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+
+        });
+
 
     }
 
