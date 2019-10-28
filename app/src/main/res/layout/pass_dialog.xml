@@ -5,18 +5,6 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <ImageView
-        android:id="@+id/close1"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="94dp"
-        android:layout_marginEnd="22dp"
-        android:contentDescription="@string/description"
-        android:elevation="3dp"
-        android:src="@drawable/close" />
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,8 +37,6 @@
                 android:id="@+id/animation_view"
                 android:layout_width="140dp"
                 android:layout_height="120dp"
-                android:layout_marginTop="-20dp"
-                android:layout_marginBottom="-20dp"
                 app:lottie_rawRes="@raw/winner"
                 app:lottie_loop="true"
                 app:lottie_autoPlay="true" />

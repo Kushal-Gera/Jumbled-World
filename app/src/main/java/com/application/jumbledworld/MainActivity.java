@@ -63,8 +63,11 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
     Dialog dialog;
 
     private RewardedVideoAd mRewardVideoAd;
-    private AdView adView;
     InterstitialAd interstitialAd;
+    private AdView adView;
+    public static final String BANNER_ID = "ca-app-pub-5073642246912223/5273510819";
+    public static final String INTERSTITIAL_ID = "ca-app-pub-5073642246912223/1171603950";
+    public static final int ADD_AFTER_LEVEL = 3;
 
     int hint1 = 10;         //just an random
     int hint2 = 100;         //value to initialise it
@@ -81,6 +84,20 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
+//        ad stuff starts here.....
+        mRewardVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardVideoAd.setRewardedVideoAdListener(this);
+        loadRewardedVideoAd();
+
+        MobileAds.initialize(this, BANNER_ID);
+        adView = findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(INTERSTITIAL_ID);
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //get saved level if any else we get default value i.e zero
         l = getIntent().getIntExtra(INTENT_LEVEL, 0);
 
@@ -179,20 +196,6 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             initialise_with(null, buttonList);
             level.setText(getResources().getString(R.string.all_cleared));
         }
-
-
-//        ad stuff starts here.....
-        mRewardVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardVideoAd.setRewardedVideoAdListener(this);
-        loadRewardedVideoAd();
-
-        MobileAds.initialize(this, "ca-app-pub-5073642246912223/5273510819");
-        adView = findViewById(R.id.adView);
-        adView.loadAd(new AdRequest.Builder().build());
-
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-5073642246912223/1171603950");
-        interstitialAd.loadAd(new AdRequest.Builder().build());
 
 
     }
@@ -388,14 +391,6 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.show();
 
-                    ImageView close1 = dialog.findViewById(R.id.close1);
-                    close1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
-
                     ImageView replay1 = dialog.findViewById(R.id.replay1);
                     replay1.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -425,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
                                 hint.setVisibility(View.VISIBLE);
                                 hintLeft.setVisibility(View.VISIBLE);
-                                if (l%4==0){
+                                if (l%ADD_AFTER_LEVEL==0){
                                     if (interstitialAd.isLoaded()){
                                         interstitialAd.show();
                                         interstitialAd.setAdListener(new AdListener(){
@@ -490,14 +485,6 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.show();
                     adView.loadAd(new AdRequest.Builder().build());
-
-                    ImageView close = dialog.findViewById(R.id.close);
-                    close.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
 
                     ImageView replay = dialog.findViewById(R.id.replay);
                     replay.setOnClickListener(new View.OnClickListener() {
@@ -638,6 +625,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
         editor.apply();
 
     }
+
 
     //    all add stufffff is down belowww.....
     private void loadRewardedVideoAd() {

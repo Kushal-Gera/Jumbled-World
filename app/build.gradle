@@ -6,8 +6,8 @@ android {
         applicationId "com.application.jumbledworld"
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 13
-        versionName "3.5"
+        versionCode 15
+        versionName "4.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

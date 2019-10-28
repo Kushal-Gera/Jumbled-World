@@ -21,6 +21,7 @@ public class ContinueScreen extends AppCompatActivity {
     public static final String SHARED_PREF = "shared_pref";
     public static final String LEVEL_REACHED = "something";
     public static final String INTENT_LEVEL = "some";
+    InterstitialAd interstitialAd;
 
     Button new_game, cont;
 
@@ -39,7 +40,7 @@ public class ContinueScreen extends AppCompatActivity {
         new_game = findViewById(R.id.new_game);
         cont = findViewById(R.id.cont);
 
-        final InterstitialAd interstitialAd = new InterstitialAd(this);
+        interstitialAd = new InterstitialAd(ContinueScreen.this);
         interstitialAd.setAdUnitId("ca-app-pub-5073642246912223/1171603950");
         interstitialAd.loadAd(new AdRequest.Builder().build());
         interstitialAd.setAdListener(new AdListener(){
@@ -53,7 +54,6 @@ public class ContinueScreen extends AppCompatActivity {
                 intent.putExtra(INTENT_LEVEL, level);
                 startActivity(intent);
                 finish();
-
                 interstitialAd.loadAd(new AdRequest.Builder().build());
             }
         });
@@ -75,7 +75,6 @@ public class ContinueScreen extends AppCompatActivity {
                 if (interstitialAd.isLoaded())
                     interstitialAd.show();
                 else {
-
                     SharedPreferences preferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
                     int level = preferences.getInt(LEVEL_REACHED, 0);
 
@@ -83,6 +82,7 @@ public class ContinueScreen extends AppCompatActivity {
                     intent.putExtra(INTENT_LEVEL, level);
                     startActivity(intent);
                     finish();
+
                 }
             }
 
