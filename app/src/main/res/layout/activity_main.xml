@@ -271,7 +271,7 @@
             android:text="A"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
-            tools:ignore="HardcodedText" />
+            tools:ignore="ButtonStyle,HardcodedText" />
 
         <Button
             android:id="@+id/op6"

@@ -2,6 +2,7 @@ package com.application.jumbledworld;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,7 +33,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements RewardedVideoAdListener {
 
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
     int hint1 = 10;         //just an random
     int hint2 = 100;         //value to initialise it
 
+    Vibrator vib;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,22 +86,22 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+        vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 //        ad stuff starts here.....
-        mRewardVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardVideoAd.setRewardedVideoAdListener(this);
-        loadRewardedVideoAd();
-
         MobileAds.initialize(this, BANNER_ID);
         adView = findViewById(R.id.adView);
         adView.loadAd(new AdRequest.Builder().build());
+
+        mRewardVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardVideoAd.setRewardedVideoAdListener(this);
+        loadRewardedVideoAd();
 
         interstitialAd = new InterstitialAd(this);
         interstitialAd.setAdUnitId(INTERSTITIAL_ID);
         interstitialAd.loadAd(new AdRequest.Builder().build());
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //get saved level if any else we get default value i.e zero
         l = getIntent().getIntExtra(INTENT_LEVEL, 0);
 
         WORDS = new ArrayList<>();
@@ -106,10 +109,14 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
         size = WORDS.size();
 
         //these are the initialisations :(
-        op1 = findViewById(R.id.op1);           op5 = findViewById(R.id.op5);
-        op2 = findViewById(R.id.op2);           op6 = findViewById(R.id.op6);
-        op3 = findViewById(R.id.op3);           op7 = findViewById(R.id.op7);
-        op4 = findViewById(R.id.op4);           op8 = findViewById(R.id.op8);
+        op1 = findViewById(R.id.op1);
+        op5 = findViewById(R.id.op5);
+        op2 = findViewById(R.id.op2);
+        op6 = findViewById(R.id.op6);
+        op3 = findViewById(R.id.op3);
+        op7 = findViewById(R.id.op7);
+        op4 = findViewById(R.id.op4);
+        op8 = findViewById(R.id.op8);
 
         ans1 = findViewById(R.id.ans1);
         ans2 = findViewById(R.id.ans2);
@@ -155,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                 hint_func();
             }
         });
-        if(allowedHint-click <= 0){
+        if (allowedHint - click <= 0) {
             hint.setText("more hints ?");
         }
 
@@ -163,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vib.vibrate(50);
                 reset();
             }
         });
@@ -197,23 +205,67 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             level.setText(getResources().getString(R.string.all_cleared));
         }
 
-
     }
 
-// main game logic is down belowww.....
+    // main game logic is down belowww.....
     private void addSomeWords() {
-        WORDS.add("play");  WORDS.add("rain");  WORDS.add("time");  WORDS.add("come");  WORDS.add("when");
-        WORDS.add("wind");  WORDS.add("dash");  WORDS.add("lock");  WORDS.add("tune");  WORDS.add("fine");
-        WORDS.add("dude");  WORDS.add("mute");  WORDS.add("kite");  WORDS.add("dark");  WORDS.add("bird");
-        WORDS.add("team");  WORDS.add("wine");  WORDS.add("step");  WORDS.add("food");  WORDS.add("tyre");
-        WORDS.add("sick");  WORDS.add("skip");  WORDS.add("chin");  WORDS.add("soup");  WORDS.add("kind");
-        WORDS.add("mail");  WORDS.add("spin");  WORDS.add("toss");  WORDS.add("pick");  WORDS.add("sure");
-        WORDS.add("show");  WORDS.add("mind");  WORDS.add("wink");  WORDS.add("line");  WORDS.add("mint");
-        WORDS.add("tank");  WORDS.add("wall");  WORDS.add("hint");  WORDS.add("rice");  WORDS.add("rock");
-        WORDS.add("dice");  WORDS.add("bike");  WORDS.add("kick");  WORDS.add("swim");  WORDS.add("hint");
-        WORDS.add("dine");  WORDS.add("show");  WORDS.add("wall");  WORDS.add("blow");  WORDS.add("mock");
-        WORDS.add("talk");  WORDS.add("rock");  WORDS.add("loss");  WORDS.add("fire");  WORDS.add("meme");
-        WORDS.add("rich");  WORDS.add("site");  WORDS.add("wind");  WORDS.add("hole");  WORDS.add("wise");
+        WORDS.add("play");
+        WORDS.add("rain");
+        WORDS.add("time");
+        WORDS.add("wind");
+        WORDS.add("dash");
+        WORDS.add("lock");
+        WORDS.add("tune");
+        WORDS.add("bird");
+        WORDS.add("team");
+        WORDS.add("wine");
+//        WORDS.add("step");
+//        WORDS.add("food");
+//        WORDS.add("fine");
+//        WORDS.add("mute");
+//        WORDS.add("kite");
+//        WORDS.add("dark");
+//        WORDS.add("tyre");
+//        WORDS.add("sick");
+//        WORDS.add("skip");
+//        WORDS.add("chin");
+//        WORDS.add("soup");
+//        WORDS.add("kind");
+//        WORDS.add("mail");
+//        WORDS.add("spin");
+//        WORDS.add("toss");
+//        WORDS.add("pick");
+//        WORDS.add("sure");
+//        WORDS.add("show");
+//        WORDS.add("mind");
+//        WORDS.add("wink");
+//        WORDS.add("line");
+//        WORDS.add("mint");
+//        WORDS.add("tank");
+//        WORDS.add("wall");
+//        WORDS.add("hint");
+//        WORDS.add("rice");
+//        WORDS.add("rock");
+//        WORDS.add("dice");
+//        WORDS.add("bike");
+//        WORDS.add("kick");
+//        WORDS.add("swim");
+//        WORDS.add("hint");
+//        WORDS.add("dine");
+//        WORDS.add("show");
+//        WORDS.add("wall");
+//        WORDS.add("blow");
+//        WORDS.add("mock");
+//        WORDS.add("talk");
+//        WORDS.add("rock");
+//        WORDS.add("loss");
+//        WORDS.add("fire");
+//        WORDS.add("meme");
+//        WORDS.add("rich");
+//        WORDS.add("site");
+//        WORDS.add("wind");
+//        WORDS.add("hole");
+//        WORDS.add("wise");
     }
 
     private void initialise_with(final String word, final ArrayList<Button> btns) {
@@ -239,6 +291,8 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
         if (click < allowedHint && hint1 == 10) {
 //             2 hints left
             click++;
+            vib.vibrate(10);
+
             Random r = new Random();
             hint1 = r.nextInt(4);
             tvList.get(hint1).setText(String.valueOf(WORDS.get(l).charAt(hint1)).toUpperCase());
@@ -246,10 +300,11 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
             hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
             hintLeft.setText(String.valueOf(allowedHint - click));
-        }
-        else if (click < allowedHint) {
+        } else if (click < allowedHint) {
 //             1 hint left
             click++;
+            vib.vibrate(10);
+
             Random rr = new Random();
             do {
                 hint2 = rr.nextInt(4);
@@ -262,8 +317,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             hint.setText("more hints ?");
 
             temp1 = hint2;
-        }
-        else {
+        } else {
 //             0 hint left
             if (mRewardVideoAd.isLoaded())
                 mRewardVideoAd.show();
@@ -271,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                 loadRewardedVideoAd();
         }
 
-        if(allowedHint-click == 0){
+        if (allowedHint - click == 0) {
             hint.setText("more hints ?");
         }
 
@@ -387,6 +441,8 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             h1.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    vib.vibrate(50);
+
                     dialog.setContentView(R.layout.pass_dialog);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.show();
@@ -416,14 +472,16 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                                 l++;
                                 click = 1;
                                 adView.loadAd(new AdRequest.Builder().build());
-                                hint1 =10; hint2 =100; temp1 = 11;
+                                hint1 = 10;
+                                hint2 = 100;
+                                temp1 = 11;
 
                                 hint.setVisibility(View.VISIBLE);
                                 hintLeft.setVisibility(View.VISIBLE);
-                                if (l%ADD_AFTER_LEVEL==0){
-                                    if (interstitialAd.isLoaded()){
+                                if (l % ADD_AFTER_LEVEL == 0) {
+                                    if (interstitialAd.isLoaded()) {
                                         interstitialAd.show();
-                                        interstitialAd.setAdListener(new AdListener(){
+                                        interstitialAd.setAdListener(new AdListener() {
                                             @Override
                                             public void onAdClosed() {
                                                 interstitialAd.loadAd(new AdRequest.Builder().build());
@@ -441,7 +499,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                                     hintLeft.setBackground(getResources().getDrawable(R.drawable.circle_red));
                                 }
                                 hint.setText("want a hint ?");
-                                if(allowedHint-click <= 0){
+                                if (allowedHint - click <= 0) {
                                     hint.setText("more hints ?");
                                 }
 
@@ -472,14 +530,13 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
             }, 200);
 
             //******************************************************************************************
-        }
-
-        else {
+        } else {
 //            FAIL
             Handler h = new Handler();
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    vib.vibrate(80);
 
                     dialog.setContentView(R.layout.fail_dialog);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -502,12 +559,12 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
                 }
             }, 200);
         }
-
     }
 
     private void clearAns() {
 
         Handler handler = new Handler();
+        vib.vibrate(50);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -518,10 +575,8 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
     }
 
     private void hide_n_add(View v) {
-
         v.setVisibility(View.INVISIBLE);
         arrayList.add(v);
-
     }
 
     private void show_n_remove() {
@@ -598,6 +653,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
     private void reset() {
         pointer = 0;
+
         for (TextView tv : tvList) {
             tv.setText(default_ques);
             tv.setTextColor(getResources().getColor(R.color.colorBlack));
@@ -630,7 +686,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
     //    all add stufffff is down belowww.....
     private void loadRewardedVideoAd() {
 //        to be changed here
-        if (!mRewardVideoAd.isLoaded()){
+        if (!mRewardVideoAd.isLoaded()) {
             mRewardVideoAd.loadAd("ca-app-pub-5073642246912223/5368045435",
                     new AdRequest.Builder().build());
         }
@@ -656,9 +712,9 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
         loadRewardedVideoAd();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onRewarded(RewardItem rewardItem) {
-
         click--;
         hintLeft.setText(String.valueOf(allowedHint - click));
         hint.setText("want a hint ?");
@@ -673,14 +729,13 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
-        Toast.makeText(this, "No Internet\nExtra hints won't be fetched", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "No Network", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRewardedVideoCompleted() {
 
     }
-
 
 
     @Override
@@ -691,7 +746,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
     @Override
     public void onPause() {
-        mRewardVideoAd.destroy(this);
+        mRewardVideoAd.pause(this);
         super.onPause();
     }
 
@@ -700,9 +755,6 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
         mRewardVideoAd.destroy(this);
         super.onDestroy();
     }
-
-
-
 
 
 }
