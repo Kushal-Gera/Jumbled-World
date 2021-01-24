@@ -34,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 public class MainActivity extends AppCompatActivity implements RewardedVideoAdListener {
 
     private static final String TAG = "MainActivity";
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
     private Button op1, op2, op3, op4, op5, op6, op7, op8;
     private TextView ans1, ans2, ans3, ans4;
+    Vibrator vib;
     TextView reset, hint, level, hintLeft, easter;
     ImageView rocket;
 
@@ -72,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
 
     int hint1 = 10;         //just an random
     int hint2 = 100;         //value to initialise it
-
-    Vibrator vib;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -212,60 +212,63 @@ public class MainActivity extends AppCompatActivity implements RewardedVideoAdLi
         WORDS.add("play");
         WORDS.add("rain");
         WORDS.add("time");
-        WORDS.add("wind");
-        WORDS.add("dash");
-        WORDS.add("lock");
-        WORDS.add("tune");
-        WORDS.add("bird");
-        WORDS.add("team");
-        WORDS.add("wine");
-//        WORDS.add("step");
-//        WORDS.add("food");
-//        WORDS.add("fine");
-//        WORDS.add("mute");
-//        WORDS.add("kite");
-//        WORDS.add("dark");
-//        WORDS.add("tyre");
-//        WORDS.add("sick");
-//        WORDS.add("skip");
-//        WORDS.add("chin");
-//        WORDS.add("soup");
-//        WORDS.add("kind");
-//        WORDS.add("mail");
-//        WORDS.add("spin");
-//        WORDS.add("toss");
-//        WORDS.add("pick");
-//        WORDS.add("sure");
-//        WORDS.add("show");
-//        WORDS.add("mind");
-//        WORDS.add("wink");
-//        WORDS.add("line");
-//        WORDS.add("mint");
-//        WORDS.add("tank");
-//        WORDS.add("wall");
-//        WORDS.add("hint");
-//        WORDS.add("rice");
-//        WORDS.add("rock");
-//        WORDS.add("dice");
-//        WORDS.add("bike");
-//        WORDS.add("kick");
-//        WORDS.add("swim");
-//        WORDS.add("hint");
-//        WORDS.add("dine");
-//        WORDS.add("show");
-//        WORDS.add("wall");
-//        WORDS.add("blow");
-//        WORDS.add("mock");
-//        WORDS.add("talk");
-//        WORDS.add("rock");
-//        WORDS.add("loss");
-//        WORDS.add("fire");
-//        WORDS.add("meme");
-//        WORDS.add("rich");
-//        WORDS.add("site");
-//        WORDS.add("wind");
-//        WORDS.add("hole");
-//        WORDS.add("wise");
+
+        if (!getSharedPreferences(SHARED_PREF, MODE_PRIVATE).getBoolean("trial", false)) {
+            WORDS.add("wind");
+            WORDS.add("dash");
+            WORDS.add("lock");
+            WORDS.add("tune");
+            WORDS.add("bird");
+            WORDS.add("team");
+            WORDS.add("wine");
+            WORDS.add("step");
+            WORDS.add("food");
+            WORDS.add("fine");
+            WORDS.add("mute");
+            WORDS.add("kite");
+            WORDS.add("dark");
+            WORDS.add("tyre");
+            WORDS.add("sick");
+            WORDS.add("skip");
+            WORDS.add("chin");
+            WORDS.add("soup");
+            WORDS.add("kind");
+            WORDS.add("mail");
+            WORDS.add("spin");
+            WORDS.add("toss");
+            WORDS.add("pick");
+            WORDS.add("sure");
+            WORDS.add("show");
+            WORDS.add("mind");
+            WORDS.add("wink");
+            WORDS.add("line");
+            WORDS.add("mint");
+            WORDS.add("tank");
+            WORDS.add("wall");
+            WORDS.add("hint");
+            WORDS.add("rice");
+            WORDS.add("rock");
+            WORDS.add("dice");
+            WORDS.add("bike");
+            WORDS.add("kick");
+            WORDS.add("swim");
+            WORDS.add("hint");
+            WORDS.add("dine");
+            WORDS.add("show");
+            WORDS.add("wall");
+            WORDS.add("blow");
+            WORDS.add("mock");
+            WORDS.add("talk");
+            WORDS.add("rock");
+            WORDS.add("loss");
+            WORDS.add("fire");
+            WORDS.add("meme");
+            WORDS.add("rich");
+            WORDS.add("site");
+            WORDS.add("wind");
+            WORDS.add("hole");
+            WORDS.add("wise");
+        }
     }
 
     private void initialise_with(final String word, final ArrayList<Button> btns) {

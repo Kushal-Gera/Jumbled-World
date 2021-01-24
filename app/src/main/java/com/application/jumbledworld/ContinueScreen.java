@@ -1,16 +1,15 @@
 package com.application.jumbledworld;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -43,7 +42,7 @@ public class ContinueScreen extends AppCompatActivity {
         interstitialAd = new InterstitialAd(ContinueScreen.this);
         interstitialAd.setAdUnitId("ca-app-pub-5073642246912223/1171603950");
         interstitialAd.loadAd(new AdRequest.Builder().build());
-        interstitialAd.setAdListener(new AdListener(){
+        interstitialAd.setAdListener(new AdListener() {
 
             @Override
             public void onAdClosed() {
@@ -62,7 +61,17 @@ public class ContinueScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: in the new_game btn");
+                getSharedPreferences(SHARED_PREF, MODE_PRIVATE).edit().putBoolean("trial", false).apply();
                 startActivity(new Intent(ContinueScreen.this, MainActivity.class));
+            }
+        });
+
+        new_game.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                getSharedPreferences(SHARED_PREF, MODE_PRIVATE).edit().putBoolean("trial", true).apply();
+                startActivity(new Intent(ContinueScreen.this, MainActivity.class));
+                return true;
             }
         });
 
